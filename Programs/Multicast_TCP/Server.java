@@ -5,9 +5,9 @@ import java.util.*;
 public class Server {
     private static Map<String, List<ClientHandler>> groupClients = new HashMap<>();
     private static final Scanner scanner = new Scanner(System.in);
-
+    private static final int port = 5000;
     public static void main(String[] args) {
-        int port = 5000;
+        
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server is listening on port " + port);
 

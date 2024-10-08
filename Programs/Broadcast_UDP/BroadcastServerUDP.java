@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.*;
 
 public class BroadcastServerUDP {
@@ -5,7 +7,9 @@ public class BroadcastServerUDP {
         DatagramSocket socket = new DatagramSocket(); // Create a socket
         socket.setBroadcast(true); // Enable broadcasting
 
-        String message = "Broadcast message from server";
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter your broadcast message: ");
+        String message = br.readLine();
         byte[] buffer = message.getBytes();
 
         InetAddress broadcastAddress = InetAddress.getByName("255.255.255.255"); // Broadcast address
