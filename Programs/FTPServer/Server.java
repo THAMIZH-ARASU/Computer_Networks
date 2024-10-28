@@ -1,5 +1,7 @@
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Server {
     private static final int PORT = 12345; // Server port
@@ -43,6 +45,8 @@ class ClientHandler implements Runnable {
                 out.println("File Name: " + file.getName());
                 out.println("File Size: " + file.length() + " bytes");
                 out.println("File Format: " + getFileExtension(file));
+                out.println("File accessing time: " + getFileAccessingTime(file));
+                out.println("File content:");
 
                 // Send file contents
                 try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
@@ -73,5 +77,12 @@ class ClientHandler implements Runnable {
             return name.substring(lastIndex + 1);
         }
         return "unknown";
+    }
+
+    // Helper method to get formatted file accessing time
+    private String getFileAccessingTime(File file) {
+        long lastModified = file.lastModified();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date(lastModified));
     }
 }
