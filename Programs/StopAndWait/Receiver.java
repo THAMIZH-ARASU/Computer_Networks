@@ -17,7 +17,7 @@ public class Receiver {
                 System.out.println("Client: Received frame " + frameNumber + ": " + message);
                 frameNumber = 1 - frameNumber;
                 if (new Random().nextInt(100) < 30) {
-                    System.out.println("Client: ACK for frame " + frameNumber + " lost.");
+                    System.out.println("Client: ACK " + frameNumber + " lost.");
                     continue; 
                 }
                 String ack = "ACK " + frameNumber;
