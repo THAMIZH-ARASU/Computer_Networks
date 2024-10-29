@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Sender {
     private static final int PORT = 12345;
     private static Random random = new Random();
-    private static final int TIME_OUT = 3000;
+    private static final int TIME_OUT = 5000;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(PORT);
              Socket clientSocket = serverSocket.accept();
@@ -20,15 +20,17 @@ public class Sender {
                 String message = scanner.nextLine();
                 if (message.equalsIgnoreCase("exit")) break;
                 sendFrame(out, in, frameNumber, message);
-                frameNumber++;
+                frameNumber = 1 - frameNumber;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     private static void sendFrame(PrintWriter out, BufferedReader in, int frameNumber, String message) throws IOException {
-        String frame = frameNumber + ": " + message;
         System.out.println("Server: Sent frame " + frameNumber + ": " + message);
+
+        String frame = frameNumber + ": " + message;
+        
         if (random.nextInt(100) < 30) {
             System.out.println("Server: Frame " + frameNumber + " lost during transmission.");
             System.out.println("Resending the lost frame...");
@@ -42,7 +44,7 @@ public class Sender {
             try {
                 if (in.ready()) {
                     String ack = in.readLine(); 
-                    if (ack != null && ack.equals("ACK " + frameNumber)) {
+                    if (ack != null && ack.equals("ACK " + (1 - frameNumber))) {
                         System.out.println("Server: Received ACK for frame " + frameNumber);
                         ackReceived = true;
                     }

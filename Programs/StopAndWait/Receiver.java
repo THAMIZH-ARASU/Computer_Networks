@@ -15,6 +15,7 @@ public class Receiver {
                 if (message == null) break; 
                 int frameNumber = Integer.parseInt(message.split(":")[0].trim());
                 System.out.println("Client: Received frame " + frameNumber + ": " + message);
+                frameNumber = 1 - frameNumber;
                 if (new Random().nextInt(100) < 30) {
                     System.out.println("Client: ACK for frame " + frameNumber + " lost.");
                     continue; 
