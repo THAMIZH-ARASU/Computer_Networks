@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class KeyboardControlClient {
     public static void main(String[] args) {
-        String serverAddress = "localhost"; // Server address (change as needed)
+        String serverAddress = "    101.1.10.178"; // Server address (change as needed)
         int port = 1234; // Server port
 
         try (Socket socket = new Socket(serverAddress, port);

@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class MouseControlServer {
     public static void main(String[] args) {
-        int port = 1234; // Server port for listening to client commands
+        int port = 1234; 
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Mouse Control Server started. Listening on port " + port);
@@ -17,13 +17,12 @@ public class MouseControlServer {
                      BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 
                     System.out.println("Client connected.");
-                    Robot robot = new Robot();  // Robot instance to control mouse
-
+                    Robot robot = new Robot();  
                     String command;
                     while ((command = in.readLine()) != null) {
                         System.out.println("Received command: " + command);
 
-                        // Parse the command received from the client
+                        
                         String[] parts = command.split(" ");
                         String action = parts[0];
 

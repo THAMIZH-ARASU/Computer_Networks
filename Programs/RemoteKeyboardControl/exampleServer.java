@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class exampleServer {
     public static void main(String[] args) {
-        int port = 1234; // Port on which the server listens
+        int port = 1234; // Server port for listening to client commands
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Keyboard Control Server started. Listening on port " + port);
@@ -17,32 +17,40 @@ public class exampleServer {
                      BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 
                     System.out.println("Client connected.");
-                    Robot robot = new Robot();  // Robot instance to perform keyboard actions
+                    Robot robot = new Robot();  // Robot instance to control keyboard
 
                     String command;
                     while ((command = in.readLine()) != null) {
                         System.out.println("Received command: " + command);
 
-                        // Split the command into action and parameters
-                        String[] parts = command.split(" ", 2);
+                        // Parse the command received from the client
+                        String[] parts = command.split(" ");
                         String action = parts[0];
-                        String parameters = parts.length > 1 ? parts[1] : "";
 
                         switch (action) {
                             case "TYPE":
-                                typeText(robot, parameters);
+                                if (parts.length > 1) {
+                                    String text = command.substring(5);  // Get the text to type after "TYPE "
+                                    for (char ch : text.toCharArray()) {
+                                        int keyCode = KeyEvent.getExtendedKeyCodeForChar(ch);
+                                        if (KeyEvent.CHAR_UNDEFINED != keyCode) {
+                                            robot.keyPress(keyCode);
+                                            robot.keyRelease(keyCode);
+                                        }
+                                    }
+                                }
                                 break;
 
                             case "KEY_PRESS":
-                                if (!parameters.isEmpty()) {
-                                    int keyCode = Integer.parseInt(parameters);
+                                if (parts.length > 1) {
+                                    int keyCode = Integer.parseInt(parts[1]);
                                     robot.keyPress(keyCode);
                                 }
                                 break;
 
                             case "KEY_RELEASE":
-                                if (!parameters.isEmpty()) {
-                                    int keyCode = Integer.parseInt(parameters);
+                                if (parts.length > 1) {
+                                    int keyCode = Integer.parseInt(parts[1]);
                                     robot.keyRelease(keyCode);
                                 }
                                 break;
@@ -59,15 +67,6 @@ public class exampleServer {
             System.out.println("Server error: " + e.getMessage());
         }
     }
-
-    // Helper method to type a string character by character
-    private static void typeText(Robot robot, String text) {
-        for (char ch : text.toCharArray()) {
-            int keyCode = KeyEvent.getExtendedKeyCodeForChar(ch);
-            if (keyCode != KeyEvent.CHAR_UNDEFINED) {
-                robot.keyPress(keyCode);
-                robot.keyRelease(keyCode);
-            }
-        }
-    }
 }
+
+

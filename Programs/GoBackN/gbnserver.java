@@ -5,25 +5,25 @@ import java.util.Scanner;
 
 public class gbnserver{ 
     private static final int PORT = 12345;
-    private static final int TIMEOUT_MS = 2000; // Timeout duration in milliseconds
+    private static final int TIMEOUT_MS = 2000; 
     private static Random random = new Random();
 
-    // Instance variables for tracking state
-    private static int base = 0; // The base of the current window
-    private static int nextSeqNum = 0; // Next sequence number to send
-    private static int frameCount; // Total number of frames to send
-    private static int windowSize; // Size of the sliding window
-    private static String[] messages; // Array to hold user-defined messages
+    
+    private static int base = 0; 
+    private static int nextSeqNum = 0; 
+    private static int frameCount; 
+    private static int windowSize;
+    private static String[] messages; 
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Get user input for the number of frames and window size
+        
         System.out.print("Enter the total number of frames to send: ");
         frameCount = scanner.nextInt();
         System.out.print("Enter the window size: ");
         windowSize = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline character
+        scanner.nextLine();
 
         messages = new String[frameCount];
         for (int i = 0; i < frameCount; i++) {
@@ -39,13 +39,13 @@ public class gbnserver{
             System.out.println("Client connected. Ready to send messages...");
 
             while (nextSeqNum < frameCount) {
-                // Send frames within the window
+               
                 while (nextSeqNum < base + windowSize && nextSeqNum < frameCount) {
                     sendFrame(out, nextSeqNum);
                     nextSeqNum++;
                 }
 
-                // Wait for ACKs with timeout
+                
                 waitForAcks(in, out);
             }
         } catch (IOException e) {
@@ -57,13 +57,13 @@ public class gbnserver{
         String frame = "Frame " + seqNum + ": " + messages[seqNum];
         System.out.println("Server: Sent " + frame);
 
-        // Simulate frame loss with a 30% chance
+      
         if (random.nextInt(100) < 30) {
             System.out.println("Server: " + frame + " lost during transmission.");
-            return; // Simulate loss
+            return; 
         }
 
-        out.println(frame); // Send frame
+        out.println(frame); 
     }
 
     private static void waitForAcks(BufferedReader in, PrintWriter out) throws IOException {
@@ -73,15 +73,15 @@ public class gbnserver{
             startTime = System.currentTimeMillis();
             boolean ackReceived = false;
 
-            // Wait for ACK or timeout
+           
             while (System.currentTimeMillis() - startTime < TIMEOUT_MS) {
                 if (in.ready()) {
-                    String ack = in.readLine(); // Read ACK
+                    String ack = in.readLine();
                     if (ack != null) {
                         int ackNum = Integer.parseInt(ack.split(" ")[1]);
                         System.out.println("Server: Received " + ack);
                         
-                        // Move base forward if the received ACK is valid
+                        
                         if (ackNum >= base) {
                             base = ackNum + 1;
                             ackReceived = true;
@@ -90,16 +90,16 @@ public class gbnserver{
                 }
             }
 
-            // If no ACK was received within the timeout period, resend all unacknowledged frames
+           
             if (!ackReceived) {
                 System.out.println("Server: Timeout! Resending frames from " + base + " to " + (nextSeqNum - 1));
-                nextSeqNum = base; // Reset nextSeqNum to base for resending
+                nextSeqNum = base;
                 for (int i = base; i < nextSeqNum + windowSize && i < frameCount; i++) {
                     sendFrame(out, i);
                 }
             }
 
-            // Break out of the loop if all frames have been acknowledged
+            
             if (base >= frameCount) {
                 break;
             }
