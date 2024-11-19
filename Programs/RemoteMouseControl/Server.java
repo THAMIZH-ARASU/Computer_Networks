@@ -1,60 +1,50 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
-public class MouseControlServer {
-    private static final int PORT = 1234;
-
+public class Server {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Server - Mouse Control");
-        JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(600, 400));
-        frame.add(panel);
-
-        frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            System.out.println("Server is listening on port " + PORT);
-
-            // Accept the client connection
+        try {
+            // Server setup
+            ServerSocket serverSocket = new ServerSocket(12345);
+            System.out.println("Server started, waiting for client...");
             Socket socket = serverSocket.accept();
-            System.out.println("Client connected!");
+            System.out.println("Client connected.");
 
-            try (DataInputStream input = new DataInputStream(socket.getInputStream())) {
-                Robot robot = new Robot();
+            // Create an input stream to receive data from the client
+            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+            Robot robot = new Robot();
 
-                while (true) {
-                    try {
-                        // Receive mouse x, y position and click information
-                        int x = input.readInt();
-                        int y = input.readInt();
-                        boolean clicked = input.readBoolean();
+            while (true) {
+                // Read the command (mouse action) from the client
+                String command = dataInputStream.readUTF();
 
-                        // Move the mouse to the received position
-                        robot.mouseMove(x, y);
-
-                        // Simulate mouse click if required
-                        if (clicked) {
-                            robot.mousePress(MouseEvent.BUTTON1);  // Left click
-                            robot.mouseRelease(MouseEvent.BUTTON1);  // Left click release
-                        }
-                    } catch (EOFException e) {
-                        System.out.println("Client disconnected.");
-                        break; // Exit the loop if the client disconnects
-                    } catch (IOException e) {
-                        System.out.println("Error while reading data: " + e.getMessage());
-                        break; // Exit the loop if an I/O error occurs
-                    }
+                if (command.equals("MOVE")) {
+                    // Receive x and y coordinates for mouse movement
+                    int x = dataInputStream.readInt();
+                    int y = dataInputStream.readInt();
+                    robot.mouseMove(x, y);
+                } else if (command.equals("CLICK")) {
+                    // Perform a mouse click
+                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                } else if (command.equals("SCROLL")) {
+                    // Perform a scroll action
+                    int scrollAmount = dataInputStream.readInt();
+                    robot.mouseWheel(scrollAmount);
+                } else if (command.equals("EXIT")) {
+                    // Exit the server
+                    System.out.println("Exiting...");
+                    break;
                 }
-            } catch (IOException | AWTException e) {
-                System.out.println("Error during server operation: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Server error: " + e.getMessage());
+
+            dataInputStream.close();
+            socket.close();
+            serverSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

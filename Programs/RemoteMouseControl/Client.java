@@ -1,84 +1,43 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
 public class Client {
-    private static final String SERVER_ADDRESS = "101.1.10.178";  // Change if connecting to a remote server
-    private static final int PORT = 1234;
-
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Client - Mouse Control");
-        JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(600, 400));
-        frame.add(panel);
+        try {
+            // Client setup
+            Socket socket = new Socket("localhost", 12345);  // Connect to the server
+            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-        frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+            // Get the mouse position and send it to the server
+            Robot robot = new Robot();
+            PointerInfo pointerInfo = MouseInfo.getPointerInfo();
+            Point mouseLocation = pointerInfo.getLocation();
+            int currentX = (int) mouseLocation.getX();
+            int currentY = (int) mouseLocation.getY();
 
-        try (Socket socket = new Socket(SERVER_ADDRESS, PORT);
-             DataOutputStream output = new DataOutputStream(socket.getOutputStream())) {
+            // Send mouse movement command
+            dataOutputStream.writeUTF("MOVE");
+            dataOutputStream.writeInt(currentX + 100);  // Move the mouse by 100 pixels
+            dataOutputStream.writeInt(currentY);
+            dataOutputStream.flush();
 
-            System.out.println("Connected to server at " + SERVER_ADDRESS + ":" + PORT);
+            // Send a click command
+            dataOutputStream.writeUTF("CLICK");
+            dataOutputStream.flush();
 
-            // Listener for mouse movement
-            panel.addMouseMotionListener(new MouseMotionListener() {
-                @Override
-                public void mouseMoved(MouseEvent e) {
-                    try {
-                        // Send mouse coordinates to the server
-                        System.out.println("Sending mouse move event to server: " + e.getX() + ", " + e.getY());
-                        output.writeInt(e.getX());
-                        output.writeInt(e.getY());
-                        output.writeBoolean(false); // Not clicking
-                    } catch (IOException ex) {
-                        System.out.println("Error sending data: " + ex.getMessage());
-                        ex.printStackTrace();  // Print stack trace for debugging
-                    }
-                }
+            // Send a scroll command
+            dataOutputStream.writeUTF("SCROLL");
+            dataOutputStream.writeInt(3); // Scroll down
+            dataOutputStream.flush();
 
-                @Override
-                public void mouseDragged(MouseEvent e) {
-                    mouseMoved(e); // Handle drag the same as move
-                }
-            });
-
-            // Listener for mouse click
-            panel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    try {
-                        // Send mouse coordinates and click information to the server
-                        System.out.println("Sending mouse press event to server: " + e.getX() + ", " + e.getY());
-                        output.writeInt(e.getX());
-                        output.writeInt(e.getY());
-                        output.writeBoolean(true); // Mouse clicked
-                    } catch (IOException ex) {
-                        System.out.println("Error sending data: " + ex.getMessage());
-                        ex.printStackTrace();  // Print stack trace for debugging
-                    }
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    try {
-                        // Send mouse coordinates and release information to the server
-                        System.out.println("Sending mouse release event to server: " + e.getX() + ", " + e.getY());
-                        output.writeInt(e.getX());
-                        output.writeInt(e.getY());
-                        output.writeBoolean(false); // Mouse released
-                    } catch (IOException ex) {
-                        System.out.println("Error sending data: " + ex.getMessage());
-                        ex.printStackTrace();  // Print stack trace for debugging
-                    }
-                }
-            });
-
-        } catch (IOException e) {
-            System.out.println("Error connecting to the server: " + e.getMessage());
-            e.printStackTrace();  // Print stack trace for debugging
+            // Close the connection
+            dataOutputStream.writeUTF("EXIT");
+            dataOutputStream.flush();
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
