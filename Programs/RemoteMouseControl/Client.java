@@ -7,7 +7,7 @@ public class Client {
     public static void main(String[] args) {
         try {
             // Client setup
-            Socket socket = new Socket("localhost", 12345);  // Connect to the server
+            Socket socket = new Socket("101.1.10.178", 12345);  // Connect to the server
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
             // Get the mouse position and send it to the server

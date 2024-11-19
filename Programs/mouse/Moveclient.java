@@ -51,7 +51,7 @@ public class Moveclient extends JFrame {
 
     public static void main(String[] args) {
         try {
-            Socket s = new Socket("127.0.0.1", 8500); // Connect to the server
+            Socket s = new Socket("101.1.10.178", 8500); // Connect to the server
             System.out.println("Connection Established");
 
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));

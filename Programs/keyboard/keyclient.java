@@ -11,7 +11,7 @@ public class keyclient extends Frame {
 
     public static void main(String[] args) {
         try {
-            s = new Socket("127.0.0.1", 3333); // Connect to server
+            s = new Socket("101.1.10.178", 3333); // Connect to server
             System.out.println("Connection Established");
             out = new PrintWriter(s.getOutputStream(), true); // Output stream to server
             keyclient k = new keyclient();
@@ -39,7 +39,7 @@ public class keyclient extends Frame {
             }
         });
 
-        setSize(400, 400);
+        setSize(200, 200);
         setVisible(true);
     }
 
