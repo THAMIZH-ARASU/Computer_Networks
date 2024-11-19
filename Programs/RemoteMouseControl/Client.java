@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 
 public class Client {
-    private static final String SERVER_ADDRESS = "127.0.0.1";  // Change if connecting to a remote server
+    private static final String SERVER_ADDRESS = "101.1.10.178";  // Change if connecting to a remote server
     private static final int PORT = 1234;
 
     public static void main(String[] args) {

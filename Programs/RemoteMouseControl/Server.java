@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
-public class Server {
+public class MouseControlServer {
     private static final int PORT = 1234;
 
     public static void main(String[] args) {
@@ -39,8 +39,8 @@ public class Server {
 
                         // Simulate mouse click if required
                         if (clicked) {
-                            robot.mousePress(MouseEvent.BUTTON1);  // Use MouseEvent.BUTTON1 instead of BUTTON1_MASK
-                            robot.mouseRelease(MouseEvent.BUTTON1);  // Same here
+                            robot.mousePress(MouseEvent.BUTTON1);  // Left click
+                            robot.mouseRelease(MouseEvent.BUTTON1);  // Left click release
                         }
                     } catch (EOFException e) {
                         System.out.println("Client disconnected.");
