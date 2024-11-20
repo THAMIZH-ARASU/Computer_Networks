@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class CommandClient {
 
     public static void main(String[] args) {
-        String serverAddress = "localhost"; 
+        String serverAddress = "101.1.10.178"; 
         int port = 1234;
         try (Socket socket = new Socket(serverAddress, port);
              PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
