@@ -3,16 +3,20 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
+import java.util.List;  // Import the List interface from java.util
+import java.util.ArrayList;  // Import ArrayList from java.util
 
 public class Client extends JFrame {
     private JPanel mousepanel;
     private Point lastPoint; // Track the last point for drawing lines
     private PrintWriter out; // To send data to the server
+    private List<Point> points;  // Store points for drawing on the client side
 
     public Client(PrintWriter out) {
         super("Client");
         this.out = out;
         lastPoint = null;
+        points = new ArrayList<>();  // Initialize the points list
 
         mousepanel = new JPanel() {
             @Override
@@ -20,16 +24,29 @@ public class Client extends JFrame {
                 super.paintComponent(g);
                 g.setColor(Color.GREEN);
                 
-                // Optionally, you can visualize the drawing on the client too
-                if (lastPoint != null) {
-                    g.fillOval(lastPoint.x - 2, lastPoint.y - 2, 4, 4);
+                // Draw points locally (on the client side)
+                if (points.size() > 1) {
+                    for (int i = 0; i < points.size() - 1; i++) {
+                        Point p1 = points.get(i);
+                        Point p2 = points.get(i + 1);
+                        g.drawLine(p1.x, p1.y, p2.x, p2.y); // Draw a line between consecutive points
+                    }
                 }
             }
         };
 
         mousepanel.setBackground(Color.BLACK);
-        setLayout(new GridLayout(1, 1));
-        add(mousepanel);
+        setLayout(new BorderLayout());
+        add(mousepanel, BorderLayout.CENTER);
+
+        // Clear button
+        JButton clearButton = new JButton("Clear");
+        clearButton.addActionListener(e -> {
+            points.clear();  // Clear the local points list
+            out.println("CLEAR");  // Send the "CLEAR" command to the server
+            mousepanel.repaint();  // Repaint the client canvas
+        });
+        add(clearButton, BorderLayout.SOUTH);
 
         // Handle mouse events to track drawing
         mousepanel.addMouseListener(new MouseAdapter() {
@@ -57,8 +74,10 @@ public class Client extends JFrame {
     // Send point to the server
     private void sendPoint(Point p) {
         if (p != null) {
-            // Send the point as a comma-separated string (x,y)
+            // Add the point to the local list and send it to the server
+            points.add(p);
             out.println(p.x + "," + p.y);
+            mousepanel.repaint();
         }
     }
 
@@ -74,4 +93,3 @@ public class Client extends JFrame {
         }
     }
 }
-

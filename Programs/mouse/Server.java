@@ -34,9 +34,20 @@ public class Server extends JFrame {
         };
 
         mousepanel.setBackground(Color.BLACK);
-        setLayout(new GridLayout(1, 1));
+        setLayout(new BorderLayout());
+        add(mousepanel, BorderLayout.CENTER);
+
+        // Clear button
+        JButton clearButton = new JButton("Clear");
+        clearButton.addActionListener(e -> {
+            points.clear();  // Clear points list
+            out.println("CLEAR");  // Send the "CLEAR" command to the client
+            mousepanel.repaint();  // Repaint the server canvas
+        });
+        add(clearButton, BorderLayout.SOUTH);
+
         setSize(600, 600);
-        add(mousepanel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     // Method to add points received from the client
@@ -54,21 +65,24 @@ public class Server extends JFrame {
 
             PrintWriter out = new PrintWriter(s.getOutputStream(), true);
             Server server = new Server(out);
-
-            server.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             server.setVisible(true);
 
             // Listening for data from the client
             BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
-                // Parsing received x and y points
-                String[] coords = line.split(",");
-                int x = Integer.parseInt(coords[0]);
-                int y = Integer.parseInt(coords[1]);
+                if (line.equals("CLEAR")) {
+                    server.points.clear();  // Clear the server drawing
+                    server.mousepanel.repaint();
+                } else {
+                    // Parsing received x and y points
+                    String[] coords = line.split(",");
+                    int x = Integer.parseInt(coords[0]);
+                    int y = Integer.parseInt(coords[1]);
 
-                // Add point to the server's drawing
-                server.addPoint(x, y);
+                    // Add point to the server's drawing
+                    server.addPoint(x, y);
+                }
             }
         } catch (Exception e) {
             System.out.println("Exception: " + e);
