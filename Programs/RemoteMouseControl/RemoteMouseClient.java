@@ -3,54 +3,57 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
-import javax.swing.JFrame;
-
 public class RemoteMouseClient {
 
     public static void main(String[] args) {
         try {
-            try (// Connect to the server (localhost:12345)
-            Socket socket = new Socket("localhost", 12345)) {
-                System.out.println("Connected to server!");
+            // Connect to the server (localhost:12345)
+            Socket socket = new Socket("localhost", 12345);
+            System.out.println("Connected to the server!");
 
-                // Set up output stream to send data to the server
-                DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            // Output stream to send mouse position and click events to the server
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-                // Get the local mouse pointer location using MouseMotionListener
-                Robot robot = new Robot();
+            // Robot to get local mouse position
+            Robot robot = new Robot();
 
-                // Listen for the mouse move events and send to server
-                MouseMotionListener mouseListener = new MouseMotionListener() {
-                    @Override
-                    public void mouseMoved(MouseEvent e) {
-                        try {
-                            // Get mouse position
-                            int x = e.getX();
-                            int y = e.getY();
+            // Variables to store the current mouse position
+            int lastX = -1, lastY = -1;
 
-                            // Send mouse position to the server
-                            dos.writeInt(x);
-                            dos.writeInt(y);
-                            dos.flush();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
+            // Loop to constantly send the mouse position to the server
+            while (true) {
+                // Get the local mouse position
+                Point mousePos = MouseInfo.getPointerInfo().getLocation();
+                int x = (int) mousePos.getX();
+                int y = (int) mousePos.getY();
+
+                // Detect if the mouse moved
+                if (x != lastX || y != lastY) {
+                    // Send mouse position to the server
+                    dos.writeInt(x);
+                    dos.writeInt(y);
+                    lastX = x;
+                    lastY = y;
+                }
+
+                // Check for left or right mouse clicks
+                int clickEvent = 0; // 0: no click, 1: left click, 2: right click
+                if (MouseInfo.getPointerInfo().getDevice().getButtons() == 1) {
+)                    if (MouseInfo.getPointerInfo().getDevice().getButtonCount() == 1) {
+                        clickEvent = 1; // Left-click
                     }
+                }
+                if (MouseInfo.getPointerInfo().getDevice().getButtonCount() == 2) {
+                    clickEvent = 2; // Right-click
+                }
 
-                    @Override
-                    public void mouseDragged(MouseEvent e) {
-                        // We don't need to track mouse dragging, just moving
-                    }
-                };
+                // Send the click event to the server
+                dos.writeInt(clickEvent);
+                dos.flush();
 
-                // Set up a JFrame to track mouse movements
-                JFrame frame = new JFrame("Remote Mouse Client");
-                frame.setSize(800, 600);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.addMouseMotionListener(mouseListener);
-                frame.setVisible(true);
+                // Sleep for a short period to avoid flooding the server with data
+                Thread.sleep(10);
             }
-            System.out.println("Tracking mouse movement...");
 
         } catch (Exception e) {
             e.printStackTrace();
