@@ -1,10 +1,11 @@
-import java.rmi.Naming;
-import java.io.FileOutputStream;
-import java.io.ByteArrayInputStream;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import javax.imageio.ImageIO;
+
 
 public class ScreenCaptureClient {
     public static void main(String[] args) {
@@ -24,6 +25,10 @@ public class ScreenCaptureClient {
             ImageIO.write(image, "png", fos);
 
             System.out.println("Screenshot saved as 'screenshot.png'");
+
+            ImageDisplay frame = new ImageDisplay("screenshot.png");
+            frame.setVisible(true);
+            
         } catch (IOException | NotBoundException e) {
             System.err.println("Client exception: " + e.getMessage());
             e.printStackTrace();
