@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 
 public class ScreenCaptureClient {
@@ -28,6 +29,7 @@ public class ScreenCaptureClient {
 
             ImageDisplay frame = new ImageDisplay("screenshot.png");
             frame.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             
         } catch (IOException | NotBoundException e) {
             System.err.println("Client exception: " + e.getMessage());

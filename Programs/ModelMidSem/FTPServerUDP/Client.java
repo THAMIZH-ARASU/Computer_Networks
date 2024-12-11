@@ -7,13 +7,13 @@ public class Client {
         byte[] buffer = new byte[1024];
         long startTime, endTime;
         long totalBytesReceived = 0;
-        long timeout = 5000; // 5 seconds timeout
+        int timeout = 5000; // 5 seconds timeout
         int port = 9876;
         int clientPort = 9877;
         
         try {
             socket = new DatagramSocket(clientPort);
-            socket.setSoTimeout(5000); // Set timeout to 5 seconds
+            socket.setSoTimeout(timeout); // Set timeout to 5 seconds
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
             FileOutputStream fileOutputStream = new FileOutputStream("received_file.txt");
 
