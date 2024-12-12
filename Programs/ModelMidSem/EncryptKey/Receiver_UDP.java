@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Receiver {
+public class Receiver_UDP {
     public static String decrypt(String encryptedMessage, int key) {
         StringBuilder decryptedMessage = new StringBuilder();
         for (char c : encryptedMessage.toCharArray()) {
@@ -15,29 +15,19 @@ public class Receiver {
         }
         return decryptedMessage.toString();
     }
-    
 
-    public static int receiveKeyFile(String fileName) throws IOException {
-        // Create a server socket to receive the file
-        ServerSocket serverSocket = new ServerSocket(12346); // Use a separate port for the key file
-        Socket socket = serverSocket.accept();
+    public static int receiveKeyFile(String fileName, DatagramSocket socket) throws IOException {
+        byte[] buffer = new byte[1024];
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 
-        try (DataInputStream in = new DataInputStream(socket.getInputStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
-            // Receive the file size
-            int fileSize = in.readInt();
-            byte[] fileBytes = new byte[fileSize];
+        // Receive the key file
+        socket.receive(packet);
 
-            // Read the file content
-            in.readFully(fileBytes);
-
-            // Write the file to disk
-            fileOutputStream.write(fileBytes);
-            System.out.println("Key file received successfully!");
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+            fileOutputStream.write(packet.getData(), 0, packet.getLength());
         }
 
-        socket.close();
-        serverSocket.close();
+        System.out.println("Key file received successfully!");
 
         // Read and return the key from the file
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -47,25 +37,27 @@ public class Receiver {
 
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(12345);
-            System.out.println("Receiver is waiting for the connection...");
-
-            Socket socket = serverSocket.accept();
+            DatagramSocket messageSocket = new DatagramSocket(12345);
+            DatagramSocket keySocket = new DatagramSocket(12346);
 
             // Receive the encrypted message
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            String encryptedMessage = in.readUTF();
-            System.out.println("Received Encrypted Message: " + encryptedMessage);
+            byte[] messageBuffer = new byte[1024];
+            DatagramPacket messagePacket = new DatagramPacket(messageBuffer, messageBuffer.length);
+            System.out.println("Receiver is waiting for the encrypted message...");
+            messageSocket.receive(messagePacket);
 
-            socket.close();
-            serverSocket.close();
+            String encryptedMessage = new String(messagePacket.getData(), 0, messagePacket.getLength());
+            System.out.println("Received Encrypted Message: " + encryptedMessage);
 
             // Receive the key file
             String keyFileName = "Key";
-            int key = receiveKeyFile(keyFileName);
+            int key = receiveKeyFile(keyFileName, keySocket);
 
             // Decrypt the message
             System.out.println("Decrypted Message: " + decrypt(encryptedMessage, key));
+
+            messageSocket.close();
+            keySocket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
