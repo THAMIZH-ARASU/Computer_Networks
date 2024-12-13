@@ -1,41 +1,37 @@
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 
 public class Client {
-    private static final String SERVER_ADDRESS = "localhost"; // Change to the server's IP if needed
     private static final int PORT = 12345;
-    private static final int TOTAL_FRAMES = 10; // Total frames to expect
+    private static final int PACKET_SIZE = 256; // Packet size in bytes
+    private static final int TIMEOUT = 200;    // Timeout in milliseconds
 
     public static void main(String[] args) {
-        try (Socket socket = new Socket(SERVER_ADDRESS, PORT);
-             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-             
-            System.out.println("Connected to server.");
+        try (Socket socket = new Socket("localhost", PORT);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-            int expectedFrame = 0; // Expecting this frame
+            System.out.println("Client is ready to receive data...");
+            int expectedSeqNum = 0;
+
             while (true) {
-                String frame = (String) in.readObject();
-                
-                if (frame.equals("Finished")) {
-                    break; // Server indicates completion
-                }
+                String message = in.readLine(); // Receive frame
+                if (message == null) break; // Exit if no more messages
 
-                System.out.println("Received: " + frame);
+                System.out.println("Client: Received " + message);
+                int seqNum = Integer.parseInt(message.split(":")[0].split(" ")[1]); // Extract sequence number
 
-                // Simulate acknowledgment logic (could introduce packet loss for testing)
-                if (expectedFrame == Integer.parseInt(frame.split(" ")[1])) {
-                    out.writeObject("ACK " + expectedFrame);
-                    expectedFrame++;
+                if (seqNum == expectedSeqNum) {
+                    // Send ACK for in-order frame
+                    String ack = "ACK " + seqNum;
+                    out.println(ack);
+                    System.out.println("Client: Sent " + ack);
+                    expectedSeqNum++;
                 } else {
-                    // Simulating a lost frame scenario for testing (e.g., skip an ACK)
-                    System.out.println("Lost ACK for Frame " + expectedFrame);
+                    System.out.println("Client: Ignored out-of-order frame " + seqNum);
                 }
             }
-
-            System.out.println("Client finished receiving frames.");
-
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

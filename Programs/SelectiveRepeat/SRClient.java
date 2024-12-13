@@ -1,8 +1,8 @@
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 import java.util.Random;
 
-public class gbnclient{ 
+public class SRClient {
     private static final int PORT = 12345;
 
     public static void main(String[] args) {
@@ -11,8 +11,6 @@ public class gbnclient{
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
             System.out.println("Client is ready to receive messages...");
-
-            int expectedSeqNum = 0;
 
             while (true) {
                 String message = in.readLine(); // Receive frame
@@ -31,11 +29,6 @@ public class gbnclient{
                 String ack = "ACK " + seqNum;
                 out.println(ack); // Send ACK
                 System.out.println("Client: Sent " + ack);
-
-                // Update expected sequence number for Go-Back-N
-                if (seqNum == expectedSeqNum) {
-                    expectedSeqNum++;
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
