@@ -1,6 +1,12 @@
 1.	Write client and server programs that communicate using TCP sockets. 
 •	Implement ‘Selective repeat’ ARQ (Automatic Repeat Request) mechanism. The packet size of the data is 256 bytes. 
+•	If the acknowledgement message is not received in a use1.	Write client and server programs that communicate using TCP sockets. 
+•	Implement ‘Selective repeat’ ARQ (Automatic Repeat Request) mechanism. The packet size of the data is 256 bytes. 
 •	If the acknowledgement message is not received in a user defined amount of milliseconds, the message is resent in a user defined number of times until the program moves on to the next packet of data. 
+•	The server program outputs the received data to a file. 
+•	Use timeouts as 200ms and measure the reliar defined amount of milliseconds, the message is resent in a user defined number of times until the program moves on to the next packet of data. 
+•	The server program outputs the received data to a file. 
+•	Use timeouts as 200ms and measure the reliar defined amount of milliseconds, the message is resent in a user defined number of times until the program moves on to the next packet of data. 
 •	The server program outputs the received data to a file. 
 •	Use timeouts as 200ms and measure the reliability of the network as a function of timeout and throughput.
 
@@ -8,6 +14,8 @@
 
 •	Implement ‘Go back N’ ARQ (Automatic Repeat Request) mechanism. 
 •	The packet size of the data is 256 bytes and set the window size is 5
+•	If the acknowledgement message is not received in a user defined amount of milliseconds, the message is resent in a user defined number of times until the program moves on to the next packet of data. 
+•	The server ytes and set the window size is 5
 •	If the acknowledgement message is not received in a user defined amount of milliseconds, the message is resent in a user defined number of times until the program moves on to the next packet of data. 
 •	The server program outputs the received data to a file.  
 •	Use timeouts as 200ms and measure the reliability of the network as a function of timeout and throughput
@@ -28,17 +36,45 @@
 
 Write a program for Remote keyboard control using sockets.  
 At the Client side :  A character is pressed using the key board.
+At the server side:  The pressed character is converted into uppercase and it isCP connection between the client and server
+
+Write a program for Remote keyboard control using sockets.  
+At the Client side :  A character is pressed using the key board.
+At the server side:  The pressed character is converted into uppercase and it isCP connection between the client and server
+
+Write a program for Remote keyboard control using sockets.  
+At the Client side :  A character is pressed using the key board.
 At the server side:  The pressed character is converted into uppercase and it is displayed in the server side.  When the tab “space” is entered it should display the length of the string entered
+
+2.	 Implement a client-server application using RPC. 
+•	The client invokes a function call with appropriate arguments. 
+•	The se displayed in the server side.  When the tab “space” is entered it should display the length of the string entered
+
+2.	 Implement a client-server application using RPC. 
+•	The client invokes a function call with appropriate arguments. 
+•	The se displayed in the server side.  When the tab “space” is entered it should display the length of the string entered
 
 2.	 Implement a client-server application using RPC. 
 •	The client invokes a function call with appropriate arguments. 
 •	The server implements the function call on the arguments and returns result to the client. 
 •	For example if the client invokes “Palindrome (str)”, the server should return “Yes” or “No“.
 
+3.	 Write client and server programs that communicate usrver implements the function call on the arguments and returns result to the client. 
+•	For example if the client invokes “Palindrome (str)”, the server should return “Yes” or “No“.
+
+3.	 Write client and server programs that communicate usrver implements the function call on the arguments and returns result to the client. 
+•	For example if the client invokes “Palindrome (str)”, the server should return “Yes” or “No“.
+
 3.	 Write client and server programs that communicate using TCP sockets. 
 •	Five numbers of clients with port id of 5000, 5001, 5002, 5003 and 5004 are connected with a single server. 
 •	Create group 1 consists of the clients with the port id of 5000, 5001 and 5002.  
 •	Group 2 consists of the clients with the port id of 5003 and 5004.  
+•	Implement multicast communication by sending a        message to either Group1 or Group 2.
+
+
+4.	Write a file server using TCP sockets.  
+•	The server sends a reply to the user with the files.  
+•	The user with the port id of 5003 and 5004.  
 •	Implement multicast communication by sending a        message to either Group1 or Group 2.
 
 
@@ -63,6 +99,9 @@ Receiver side:
 13.	Implement a client-server arithmetic calculator application for addition, subtraction, multiplication and division using RPC.  The client invokes a function call with appropriate arguments.  The server implements the function call on the arguments and returns arithmetic result to the client
 
 
+14.	Establiication for addition, subtraction, multiplication and division using RPC.  The client invokes a function call with appropriate arguments.  The server implements the function call on the arguments and returns arithmetic result to the client
+
+
 14.	Establish a TCP connection between the client and server.  Write a program for remote command execution using sockets 
 
 15.	ARP & RARP
@@ -79,7 +118,36 @@ server program which returns the sum of the five numbers
 20.	Write a UDP client/server system in which the client program sends a number
 21.	between 1 and 10 and the server program returns the corresponding element
 22.	in an array of strings e.g.
+23.	Client>Input any number between 1 m of the five numbers
+
+20.	Write a UDP client/server system in which the client program sends a number
+21.	between 1 and 10 and the server program returns the corresponding element
+22.	in an array of strings e.g.
 23.	Client>Input any number between 1 and 10   : 5
+24.	Client> Response from server is : Fiv
+25.	
+26.	Write a UDP client/server system in which the client program sends a number
+27.	between 1 and 10 and the server program returns the corresponding element
+28.	in an array of strings e.g
+2and 10   : 5
+24.	Client> Response from server is : Fiv
+25.	
+26.	Write a UDP client/server system in which the client program sends a number
+27.	between 1 and 10 and the server program returns the corresponding element
+28.	in an array of strings e.g
+2and 10   : 5
+24.	Client> Response from server is : Fiv
+25.	
+26.	Write a UDP client/server system in which the client program sends a number
+27.	between 1 and 10 and the server program returns the corresponding element
+28.	in an array of strings e.g
+2and 10   : 5
+24.	Client> Response from server is : Fiv
+25.	
+26.	Write a UDP client/server system in which the client program sends a number
+27.	between 1 and 10 and the server program returns the corresponding element
+28.	in an array of strings e.g
+2and 10   : 5
 24.	Client> Response from server is : Fiv
 25.	
 26.	Write a UDP client/server system in which the client program sends a number
@@ -88,7 +156,17 @@ server program which returns the sum of the five numbers
 29.	Write a UDP client/server system in which the client program sends a number
 30.	between 1 and 10 and the server program returns the corresponding element
 31.	in an array of strings e.g
+32.	Write a UDP client/server system in which the client program 9.	Write a UDP client/server system in which the client program sends a number
+30.	between 1 and 10 and the server program returns the corresponding element
+31.	in an array of strings e.g
+32.	Write a UDP client/server system in which the client program 9.	Write a UDP client/server system in which the client program sends a number
+30.	between 1 and 10 and the server program returns the corresponding element
+31.	in an array of strings e.g
 32.	Write a UDP client/server system in which the client program sends a number
+33.	between 1 and 10 and the server program returns the corresponding element
+34.	in an array of strings e.g
+20.	Write a UDP client/server system in which the client program sends a number
+between 1 and 10 and the server program returns sends a number
 33.	between 1 and 10 and the server program returns the corresponding element
 34.	in an array of strings e.g
 20.	Write a UDP client/server system in which the client program sends a number
@@ -105,16 +183,33 @@ Client> Response from server is : Five
 26.	•Similarly you need to write the client side of the application in a file named
 27.	DayTimeClient.java. 
 28.	•The   client   simply   sends   a   request   to   the   server   when   it   is   run   and   the
+29.	server returns the current Date at the servlarly you need to write the client side of the application in a file named
+27.	DayTimeClient.java. 
+28.	•The   client   simply   sends   a   request   to   the   server   when   it   is   run   and   the
+29.	server returns the current Date at the servlarly you need to write the client side of the application in a file named
+27.	DayTimeClient.java. 
+28.	•The   client   simply   sends   a   request   to   the   server   when   it   is   run   and   the
+29.	server returns the current Date at the servlarly you need to write the client side of the application in a file named
+27.	DayTimeClient.java. 
+28.	•The   client   simply   sends   a   request   to   the   server   when   it   is   run   and   the
 29.	server returns the current Date at the server as mentioned above
 21.	Write the server side of the application in a file named DayTimeServer.java. 
 •The DayTimeServer simply listens on port 4078 and as soon as it receives a request from the DayTimeClient, it returns the current Date on the server using   the   following   function   of   the   java.util   package   Date   now   =   new Date(); 
 •	Similarly you need to write the client side of the application in a file named DayTimeClient.java. 
 •	The   client   simply   sends   a   request   to   the   server   when   it   is   run   and   the
 server returns the current Date at the server as mentioned above
+22.	Write a client Server Application in which, clients send four digit numbers i.e., “3145” to server. Server sends back the sum   to   the   server   when   it   is   run   and   the
+server returns the current Date at the server as mentioned above
 22.	Write a client Server Application in which, clients send four digit numbers i.e., “3145” to server. Server sends back the sum of all digits to client i.e.,  Use UDP Socket and port of your choice
 
 23.	Write   a   program   that   will   count   the   number   of   lines   in   file   that   is specified on the command line. Assume that the files are text files and placed in c:\ driver of server. Write file name, along with the number of lines in that file, to standard output at the client end. If an error occurs while trying to read from the files, you should print an error message.
+24.	LAB MANUAL               KALEEM ULLAH     driver of server. Write file name, along with the number of lines in that file, to standard output at the client end. If an error occurs while trying to read from the files, you should print an error message.
+24.	LAB MANUAL               KALEEM ULLAH     driver of server. Write file name, along with the number of lines in that file, to standard output at the client end. If an error occurs while trying to read from the files, you should print an error message.
 24.	LAB MANUAL               KALEEM ULLAH                    
+25.	BESE 21 B
+26.	                                        Computer Networks
+
+24. This Activity implements a client, DNSClient that connects to the DNS server. The DNS server simply receives data from its client and performs the followi                
 25.	BESE 21 B
 26.	                                        Computer Networks
 
@@ -128,10 +223,29 @@ Store the data in database if the request is to register the client.
 •	Store the data in database if the request is to register the client
 •	Replay the Name/IP address if the request is to Resolve
 •	Delete the all stored entries
+•Store te/IP address if the request is to Resolve
+•Delete the all stored entries
+•	Store the data in database if the request is to register the client
+•	Replay the Name/IP address if the request is to Resolve
+•	Delete the all stored entries
+•Store te/IP address if the request is to Resolve
+•Delete the all stored entries
+•	Store the data in database if the request is to register the client
+•	Replay the Name/IP address if the request is to Resolve
+•	Delete the all stored entries
+•Store te/IP address if the request is to Resolve
+•Delete the all stored entries
+•	Store the data in database if the request is to register the client
+•	Replay the Name/IP address if the request is to Resolve
+•	Delete the all stored entries
 •Store the data in database if the request is to register the client.
 •Replay the Name/IP address if the request is to Resolve
 •Delete the all stored entries
 The DNS server is a service built into most operating systems. DNS Client creates a socket and gets a connection to the DNS server. You must implement checks on data where required
+
+25. Broadcast
+
+ a connection to the DNS server. You must implement checks on data where required
 
 25. Broadcast
 

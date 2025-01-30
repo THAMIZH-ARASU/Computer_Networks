@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.Random;
 
 public class GoBackNServer {
     @SuppressWarnings("CallToPrintStackTrace")
@@ -15,6 +16,9 @@ public class GoBackNServer {
                 try (FileOutputStream fileOutputStream = new FileOutputStream("received_data.txt")) {
                     byte[] buffer = new byte[256];
                     int packetCount = 0;
+                    // Add this inside the main method, before sending the acknowledgment
+                    Random random = new Random();
+                    double lossProbability = 0.5; // 20% acknowledgment loss probability
                     // Continuously receive data packets
                     while (true) {
                         int bytesRead = inStream.read(buffer);
@@ -22,6 +26,12 @@ public class GoBackNServer {
                         
                         // Write data to file
                         fileOutputStream.write(buffer, 0, bytesRead);
+
+                        // Simulate acknowledgment loss
+                        if (random.nextDouble() < lossProbability) {
+                            System.out.println("Simulating loss of acknowledgment for packet " + packetCount);
+                            continue; // Skip sending acknowledgment
+                        }
                         
                         // Acknowledge receipt of the packet
                         packetCount++;

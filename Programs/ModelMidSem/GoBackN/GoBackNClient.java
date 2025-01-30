@@ -6,7 +6,6 @@ public class GoBackNClient {
     private static final int PACKET_SIZE = 256;
     private static final int TIMEOUT = 200; // Timeout in milliseconds
     private static final int MAX_RETRIES = 5; // Maximum retries for a packet
-    
     private static final int WINDOW_SIZE = 5; // Window size for Go-Back-N ARQ
 
     @SuppressWarnings("CallToPrintStackTrace")
@@ -24,9 +23,18 @@ public class GoBackNClient {
 
             Queue<byte[]> sendWindow = new LinkedList<>(); // Send window for Go-Back-N
 
+            Random random = new Random();
+            double lossProbability = 0.5; // 20% packet loss probability
+
             while ((bytesRead = fileInputStream.read(packet)) != -1) {
                 packetCount++;
                 byte[] dataToSend = Arrays.copyOf(packet, bytesRead);
+
+                // // Simulate packet loss
+                // if (random.nextDouble() < lossProbability) {
+                //     System.out.println("Simulating loss of packet " + packetCount);
+                //     continue; // Skip sending this packet
+                // }
 
                 // Add packet to the send window
                 sendWindow.add(dataToSend);
