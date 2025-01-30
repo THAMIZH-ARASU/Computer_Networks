@@ -22,7 +22,12 @@ public class DijkstraIncludeExclude {
     void printSolution(int[] distance) {
         System.out.println("The shortest distance from the source to all other nodes:");
         for (int i = 0; i < totalVertex; i++) {
-            System.out.println("To node " + i + " the shortest distance is: " + distance[i]);
+            if (distance[i] == Integer.MAX_VALUE){
+                System.out.println("Vertex " + i + " is not reachable");
+            }else{
+                System.out.println("To node " + i + " the shortest distance is: " + distance[i]);
+            }
+            
         }
     }
 
@@ -81,6 +86,18 @@ public class DijkstraIncludeExclude {
         }
     }
 }
+
+/*
+6
+
+-1 3 7 -1 20 6
+-1 -1 -1 -1 -1 2
+-1 -1 -1 8 6 -1
+-1 -1 -1 -1 5 -1
+-1 -1 -1 -1 -1 -1
+-1 -1 -1 3 -1 -1
+
+ */
 
 /*
 

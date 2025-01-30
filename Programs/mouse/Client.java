@@ -2,9 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
-import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;  // Import the List interface from java.util
-import java.util.ArrayList;  // Import ArrayList from java.util
+import javax.swing.*;  // Import ArrayList from java.util
 
 public class Client extends JFrame {
     private JPanel mousepanel;
@@ -47,7 +47,7 @@ public class Client extends JFrame {
             mousepanel.repaint();  // Repaint the client canvas
         });
         add(clearButton, BorderLayout.SOUTH);
-
+        
         // Handle mouse events to track drawing
         mousepanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -56,7 +56,6 @@ public class Client extends JFrame {
                 sendPoint(lastPoint);
             }
         });
-
         mousepanel.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
