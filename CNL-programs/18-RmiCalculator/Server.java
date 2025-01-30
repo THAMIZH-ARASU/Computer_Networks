@@ -6,7 +6,7 @@ public class Server {
     public static void main(String[] args) {
         try {
             // Start the RMI registry
-            LocateRegistry.createRegistry(1099);
+            LocateRegistry.createRegistry(6000); //1099
 
             // Create an instance of the calculator implementation
             CalculatorImpl calculator = new CalculatorImpl();

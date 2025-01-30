@@ -22,9 +22,10 @@ public class Client {
         textField.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 char keyChar = e.getKeyChar();
-                sendCharacter(keyChar);
                 if (keyChar == ' ') {
                     sendLength();
+                }else{
+                    sendCharacter(keyChar);
                 }
             }
         });
